@@ -1,22 +1,21 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Matter from 'matter-js';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import Matter from "matter-js";
+import { AudioPlayer, Loop, Stage, KeyListener, World } from "../../src";
+import io from "socket.io-client";
+import Character from "./character";
+import Level from "./level";
+import Fade from "./fade";
 
-import { AudioPlayer, Loop, Stage, KeyListener, World } from '../../src';
-
-import Character from './character';
-import Level from './level';
-import Fade from './fade';
-
-import GameStore from './stores/game-store';
-
+import GameStore from "./stores/game-store";
+const socket = io("http://localhost:8080");
 export default class Game extends Component {
   static propTypes = {
     onLeave: PropTypes.func,
   };
 
   componentDidMount() {
-    this.player = new AudioPlayer('/assets/music.wav', () => {
+    this.player = new AudioPlayer("/assets/music.wav", () => {
       this.stopMusic = this.player.play({
         loop: true,
         offset: 1,
@@ -45,7 +44,7 @@ export default class Game extends Component {
   render() {
     return (
       <Loop>
-        <Stage style={{ background: '#3a9bdc' }}>
+        <Stage style={{ background: "#3a9bdc" }}>
           <World onInit={this.physicsInit}>
             <Level store={GameStore} />
             <Character
@@ -76,7 +75,7 @@ export default class Game extends Component {
     Matter.World.addBody(engine.world, ground);
     Matter.World.addBody(engine.world, leftWall);
     Matter.World.addBody(engine.world, rightWall);
-  };
+  }
 
   handleEnterBuilding(index) {
     this.setState({
@@ -85,7 +84,7 @@ export default class Game extends Component {
     setTimeout(() => {
       this.props.onLeave(index);
     }, 500);
-  };
+  }
 
   constructor(props) {
     super(props);
