@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Matter from "matter-js";
 import { AudioPlayer, Loop, Stage, KeyListener, World } from "../../src";
-import io from "socket.io-client";
+
 import Character from "./character";
 import Level from "./level";
 import Fade from "./fade";
 
 import GameStore from "./stores/game-store";
-const socket = io("http://localhost:8080");
+
 export default class Game extends Component {
   static propTypes = {
     onLeave: PropTypes.func,

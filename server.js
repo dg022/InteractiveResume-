@@ -13,6 +13,7 @@ const io = require("socket.io")(server, {
   cors: {
     origin: "*",
   },
+  transports: ["websocket"],
 });
 
 let updateScoreboardInterval;
@@ -20,6 +21,10 @@ let members = new Map();
 
 io.on("connection", (socket) => {
   console.log("New client connected");
+
+  socket.on("left", (arg1) => {
+    console.log("LEFT WAS HIT");
+  });
 
   socket.on("disconnect", (reason) => {
     //When the member leaves, we want to update all the users

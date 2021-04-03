@@ -84,6 +84,7 @@ pre {
 
 i.icon {
   font-size: 10em !important;
+  cursor: pointer;
 }
 
 .controller {

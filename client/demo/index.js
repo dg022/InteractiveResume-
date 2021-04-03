@@ -2,7 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Presentation from "./presentation";
 import { AppContainer } from "react-hot-loader";
-import { Nipple } from "nipplejs";
+import io from "socket.io-client";
+
+const socket = io("http://b367fd81f310.ngrok.io");
 
 const handleMove = () => {};
 
@@ -47,7 +49,15 @@ if (window.mobileAndTabletCheck()) {
   ReactDOM.render(
     <div className="controller">
       <center>
-        <i class="chevron circle left icon"></i>
+        <i
+          onClick={() => socket.emit("left", socket.id)}
+          onTouchStart={() => {
+            console.log("here");
+            socket.emit("left", socket.id);
+          }}
+          onTouchEnd={() => console.log("you let go of this button")}
+          class="chevron circle left icon"
+        ></i>
         <i class="chevron circle right icon"></i>
       </center>
     </div>,
