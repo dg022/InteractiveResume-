@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 export default class Stage extends Component {
-
   static propTypes = {
     children: PropTypes.any,
     height: PropTypes.number,
@@ -17,7 +16,7 @@ export default class Stage extends Component {
 
   static contextTypes = {
     loop: PropTypes.object,
-  }
+  };
 
   static childContextTypes = {
     loop: PropTypes.object,
@@ -37,12 +36,12 @@ export default class Stage extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.setDimensions);
+    window.addEventListener("resize", this.setDimensions);
     this.setDimensions();
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.setDimensions);
+    window.removeEventListener("resize", this.setDimensions);
   }
 
   getChildContext() {
@@ -62,11 +61,11 @@ export default class Stage extends Component {
 
     if (height / width > vheight / vwidth) {
       targetHeight = vheight;
-      targetWidth = targetHeight * width / height;
+      targetWidth = (targetHeight * width) / height;
       targetScale = vheight / height;
     } else {
       targetWidth = vwidth;
-      targetHeight = targetWidth * height / width;
+      targetHeight = (targetWidth * height) / width;
       targetScale = vwidth / width;
     }
 
@@ -87,9 +86,9 @@ export default class Stage extends Component {
 
   getWrapperStyles() {
     return {
-      height: '100%',
-      width: '100%',
-      position: 'relative',
+      height: "100%",
+      width: "100%",
+      position: "relative",
     };
   }
 
@@ -101,15 +100,23 @@ export default class Stage extends Component {
     return {
       height: Math.floor(scale.height),
       width: Math.floor(scale.width),
-      position: 'absolute',
-      overflow: 'hidden',
+      position: "absolute",
+      overflow: "hidden",
       transform: `translate(${xOffset}px, ${yOffset}px)`,
     };
   }
 
   render() {
+    const handleMove = () => {};
+
+    const handleStop = () => {};
     return (
-      <div style={this.getWrapperStyles()} ref={(c) => { this.container = c; }}>
+      <div
+        style={this.getWrapperStyles()}
+        ref={(c) => {
+          this.container = c;
+        }}
+      >
         <div style={{ ...this.getInnerStyles(), ...this.props.style }}>
           {this.props.children}
         </div>
@@ -119,10 +126,7 @@ export default class Stage extends Component {
 
   setDimensions() {
     this.setState({
-      dimensions: [
-        this.container.offsetWidth,
-        this.container.offsetHeight,
-      ],
+      dimensions: [this.container.offsetWidth, this.container.offsetHeight],
     });
   }
 }

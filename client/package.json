@@ -28,6 +28,8 @@
   "repository": "https://github.com/FormidableLabs/react-game-kit",
   "dependencies": {
     "matter-js": "^0.14.0",
+    "nipplejs": "^0.9.0",
+    "react-joystick-component": "^1.4.0",
     "socket.io-client": "^4.0.1"
   },
   "devDependencies": {

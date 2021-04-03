@@ -42,6 +42,12 @@ export default class Game extends Component {
   }
 
   render() {
+    const handleMove = (e) => {
+      console.log(e);
+    };
+    const handleStop = (e) => {
+      console.log(e);
+    };
     return (
       <Loop>
         <Stage style={{ background: "#3a9bdc" }}>
