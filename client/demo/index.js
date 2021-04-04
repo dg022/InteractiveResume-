@@ -4,7 +4,7 @@ import Presentation from "./presentation";
 import { AppContainer } from "react-hot-loader";
 import io from "socket.io-client";
 
-const socket = io("http://b367fd81f310.ngrok.io");
+const socket = io("http://localhost:8080/");
 
 const handleMove = () => {};
 
@@ -50,7 +50,6 @@ if (window.mobileAndTabletCheck()) {
     <div className="controller">
       <center>
         <i
-          onClick={() => socket.emit("left", socket.id)}
           onTouchStart={() => {
             console.log("here");
             socket.emit("left", socket.id);

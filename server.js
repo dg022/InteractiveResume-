@@ -1,35 +1,27 @@
 const express = require("express");
 const http = require("http");
-
-const port = process.env.PORT || 8080;
+const path = require("path");
 const app = express();
-const root = require("path").join(__dirname, "client/public");
-app.use(express.static(root));
-app.get("/", (req, res) => {
-  res.sendFile("index.html", { root });
-});
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
   cors: {
     origin: "*",
   },
-  transports: ["websocket"],
+});
+var public = path.join(__dirname, "client/demo");
+
+app.get("/", function (req, res) {
+  res.sendFile(path.join(public, "index.html"));
 });
 
-let updateScoreboardInterval;
-let members = new Map();
+app.use("/", express.static(public));
+
+const PORT = process.env.PORT || 8080;
 
 io.on("connection", (socket) => {
   console.log("New client connected");
 
-  socket.on("left", (arg1) => {
-    console.log("LEFT WAS HIT");
-  });
-
-  socket.on("disconnect", (reason) => {
-    //When the member leaves, we want to update all the users
-
-    console.log("Client disconnected for:", reason);
-  });
+  socket.on("disconnect", async () => {});
 });
-server.listen(port, () => console.log(`Listening on port ${port}`));
+
+server.listen(PORT, () => console.log(`Listening on port ${PORT}`));

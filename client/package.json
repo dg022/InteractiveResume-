@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "start": "webpack-dev-server --hot --inline --port 3000 --config webpack.config.dev.js --content-base demo/",
-    "build": "babel src -d lib --copy-files",
+    "build": "webpack demo/index.js dist/bundle.js",
     "clean": "rimraf dist",
     "clean-build": "rimraf lib",
     "clean-umd": "rimraf umd",
