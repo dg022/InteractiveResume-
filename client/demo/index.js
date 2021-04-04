@@ -4,8 +4,8 @@ import Presentation from "./presentation";
 import { AppContainer } from "react-hot-loader";
 import io from "socket.io-client";
 
-//const socket = io("http://localhost:8080/");
-const socket = io("https://game-resume-interactive.herokuapp.com/");
+const socket = io("http://localhost:8080/");
+//const socket = io("https://game-resume-interactive.herokuapp.com/");
 // const [leftClicked, setLeftClicked] = useState(false);
 // const [rightClicked, setRightClicked] = useState(false);
 
