@@ -5,6 +5,7 @@ import { AppContainer } from "react-hot-loader";
 import io from "socket.io-client";
 
 const socket = io("https://game-resume-interactive.herokuapp.com/");
+// const socket = io("http://localhost:8080/");
 
 socket.on("moveLeft", (id) => {
   console.log("Holy shit THIS IS HAPPENING, WE TRIED TO MOVE LEFT");

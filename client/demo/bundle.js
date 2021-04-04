@@ -15856,6 +15856,7 @@ var _socket2 = _interopRequireDefault(_socket);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var socket = (0, _socket2.default)("https://game-resume-interactive.herokuapp.com/");
+// const socket = io("http://localhost:8080/");
 
 socket.on("moveLeft", function (id) {
   console.log("Holy shit THIS IS HAPPENING, WE TRIED TO MOVE LEFT");

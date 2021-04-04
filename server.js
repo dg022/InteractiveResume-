@@ -8,6 +8,7 @@ const io = require("socket.io")(server, {
     origin: "*",
   },
 });
+
 var public = path.join(__dirname, "client/demo");
 
 app.get("/", function (req, res) {
@@ -24,7 +25,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", async () => {});
 
   socket.on("left", (arg) => {
-    socket.emit("moveLeft", 1);
+    io.emit("moveLeft", 1);
   });
 });
 
