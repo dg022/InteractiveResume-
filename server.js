@@ -22,6 +22,10 @@ io.on("connection", (socket) => {
   console.log("New client connected");
 
   socket.on("disconnect", async () => {});
+
+  socket.on("left", (arg) => {
+    socket.emit("moveLeft", 1);
+  });
 });
 
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));

@@ -6,6 +6,10 @@ import io from "socket.io-client";
 
 const socket = io("https://game-resume-interactive.herokuapp.com/");
 
+socket.on("moveLeft", (id) => {
+  console.log("Holy shit THIS IS HAPPENING, WE TRIED TO MOVE LEFT");
+});
+
 const handleMove = () => {};
 
 const handleStop = () => {};
