@@ -31,6 +31,8 @@ export default class Character extends Component {
       characterState: 2,
       loop: false,
       spritePlaying: true,
+      leftClicked: false,
+      rightClicked: false,
     };
 
     this.handlePlayStateChanged = this.handlePlayStateChanged.bind(this);
@@ -45,6 +47,30 @@ export default class Character extends Component {
   componentDidMount() {
     this.jumpNoise = new AudioPlayer("/assets/jump.wav");
     Matter.Events.on(this.context.engine, "afterUpdate", this.update);
+
+    this.props.socket.on("moveLeft", (id) => {
+      this.setState({
+        leftClicked: true,
+      });
+    });
+
+    this.props.socket.on("stopMovingLeft", (id) => {
+      this.setState({
+        leftClicked: false,
+      });
+    });
+
+    this.props.socket.on("moveRight", (id) => {
+      this.setState({
+        rightClicked: true,
+      });
+    });
+
+    this.props.socket.on("stopMovingRight", (id) => {
+      this.setState({
+        rightClicked: false,
+      });
+    });
   }
 
   componentWillUnmount() {
@@ -160,14 +186,14 @@ export default class Character extends Component {
       return this.enterBuilding(body);
     }
 
-    if (keys.isDown(keys.LEFT)) {
+    if (keys.isDown(keys.LEFT) || this.state.leftClicked) {
       if (shouldMoveStageLeft) {
         store.setStageX(store.stageX + 5);
       }
 
       this.move(body, -5);
       characterState = 1;
-    } else if (keys.isDown(keys.RIGHT)) {
+    } else if (keys.isDown(keys.RIGHT) || this.state.rightClicked) {
       if (shouldMoveStageRight) {
         store.setStageX(store.stageX - 5);
       }

@@ -54,6 +54,7 @@ export default class Game extends Component {
           <World onInit={this.physicsInit}>
             <Level store={GameStore} />
             <Character
+              socket={this.props.socket}
               onEnterBuilding={this.handleEnterBuilding}
               store={GameStore}
               keys={this.keyListener}

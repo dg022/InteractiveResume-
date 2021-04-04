@@ -27,6 +27,18 @@ io.on("connection", (socket) => {
   socket.on("left", (arg) => {
     io.emit("moveLeft", 1);
   });
+
+  socket.on("stopMovingLeft", (arg) => {
+    io.emit("stopMovingLeft", 1);
+  });
+
+  socket.on("right", (arg) => {
+    io.emit("moveRight", 1);
+  });
+
+  socket.on("stopMovingRight", (arg) => {
+    io.emit("stopMovingRight", 1);
+  });
 });
 
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));

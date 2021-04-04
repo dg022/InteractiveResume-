@@ -15855,12 +15855,26 @@ var _socket2 = _interopRequireDefault(_socket);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//const socket = io("http://localhost:8080/");
 var socket = (0, _socket2.default)("https://game-resume-interactive.herokuapp.com/");
-// const socket = io("http://localhost:8080/");
+// const [leftClicked, setLeftClicked] = useState(false);
+// const [rightClicked, setRightClicked] = useState(false);
 
-socket.on("moveLeft", function (id) {
-  console.log("Holy shit THIS IS HAPPENING, WE TRIED TO MOVE LEFT");
-});
+// socket.on("moveLeft", (id) => {
+//   setLeftClicked(true);
+// });
+
+// socket.on("stopMovingLeft", (id) => {
+//   setLeftClicked(false);
+// });
+
+// socket.on("moveRight", (id) => {
+//   setRightClicked(true);
+// });
+
+// socket.on("stopMovingRight", (id) => {
+//   setRightClicked(false);
+// });
 
 var handleMove = function handleMove() {};
 
@@ -15877,7 +15891,7 @@ window.mobileAndTabletCheck = function () {
 _reactDom2.default.render(_react2.default.createElement(
   _reactHotLoader.AppContainer,
   null,
-  _react2.default.createElement(_presentation2.default, null)
+  _react2.default.createElement(_presentation2.default, { socket: socket })
 ), document.getElementById("root"));
 
 if (false) {
@@ -15890,6 +15904,7 @@ if (false) {
     ), document.getElementById("root"));
   });
 }
+
 if (window.mobileAndTabletCheck()) {
   console.log("THIS IS TRUE, HERE");
   _reactDom2.default.render(_react2.default.createElement(
@@ -15904,11 +15919,20 @@ if (window.mobileAndTabletCheck()) {
           socket.emit("left", socket.id);
         },
         onTouchEnd: function onTouchEnd() {
-          return console.log("you let go of this button");
+          console.log("you let go of this button");
+          socket.emit("stopMovingLeft", socket.id);
         },
         "class": "chevron circle left icon"
       }),
-      _react2.default.createElement("i", { "class": "chevron circle right icon" })
+      _react2.default.createElement("i", {
+        onTouchStart: function onTouchStart() {
+          socket.emit("right", socket.id);
+        },
+        onTouchEnd: function onTouchEnd() {
+          socket.emit("stopMovingRight", socket.id);
+        },
+        "class": "chevron circle right icon"
+      })
     )
   ), document.getElementById("root"));
 }
@@ -18412,27 +18436,27 @@ var Presentation = function (_Component) {
   }
 
   _createClass(Presentation, [{
-    key: 'render',
+    key: "render",
     value: function render() {
-      this.gameStates = [_react2.default.createElement(_intro2.default, { onStart: this.handleStart }), _react2.default.createElement(_game2.default, { onLeave: this.handleLeave }), _react2.default.createElement(_slides2.default, { onDone: this.handleDone, index: this.state.slideIndex })];
+      this.gameStates = [_react2.default.createElement(_intro2.default, { onStart: this.handleStart }), _react2.default.createElement(_game2.default, { socket: this.props.socket, onLeave: this.handleLeave }), _react2.default.createElement(_slides2.default, { onDone: this.handleDone, index: this.state.slideIndex })];
       return this.gameStates[this.state.gameState];
     }
   }, {
-    key: 'handleStart',
+    key: "handleStart",
     value: function handleStart() {
       this.setState({
         gameState: 1
       });
     }
   }, {
-    key: 'handleDone',
+    key: "handleDone",
     value: function handleDone() {
       this.setState({
         gameState: 1
       });
     }
   }, {
-    key: 'handleLeave',
+    key: "handleLeave",
     value: function handleLeave(index) {
       this.setState({
         gameState: 2,
@@ -19936,6 +19960,7 @@ var Game = (_temp = _class = function (_Component) {
             { onInit: this.physicsInit },
             _react2.default.createElement(_level2.default, { store: _gameStore2.default }),
             _react2.default.createElement(_character2.default, {
+              socket: this.props.socket,
               onEnterBuilding: this.handleEnterBuilding,
               store: _gameStore2.default,
               keys: this.keyListener
@@ -20059,7 +20084,9 @@ var Character = (0, _mobxReact.observer)(_class = (_temp = _class2 = function (_
     _this.state = {
       characterState: 2,
       loop: false,
-      spritePlaying: true
+      spritePlaying: true,
+      leftClicked: false,
+      rightClicked: false
     };
 
     _this.handlePlayStateChanged = _this.handlePlayStateChanged.bind(_this);
@@ -20075,8 +20102,34 @@ var Character = (0, _mobxReact.observer)(_class = (_temp = _class2 = function (_
   _createClass(Character, [{
     key: "componentDidMount",
     value: function componentDidMount() {
+      var _this2 = this;
+
       this.jumpNoise = new _src.AudioPlayer("/assets/jump.wav");
       _matterJs2.default.Events.on(this.context.engine, "afterUpdate", this.update);
+
+      this.props.socket.on("moveLeft", function (id) {
+        _this2.setState({
+          leftClicked: true
+        });
+      });
+
+      this.props.socket.on("stopMovingLeft", function (id) {
+        _this2.setState({
+          leftClicked: false
+        });
+      });
+
+      this.props.socket.on("moveRight", function (id) {
+        _this2.setState({
+          rightClicked: true
+        });
+      });
+
+      this.props.socket.on("stopMovingRight", function (id) {
+        _this2.setState({
+          rightClicked: false
+        });
+      });
     }
   }, {
     key: "componentWillUnmount",
@@ -20104,7 +20157,7 @@ var Character = (0, _mobxReact.observer)(_class = (_temp = _class2 = function (_
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       var x = this.props.store.characterPosition.x;
 
@@ -20117,7 +20170,7 @@ var Character = (0, _mobxReact.observer)(_class = (_temp = _class2 = function (_
             args: [x, 384, 64, 64],
             inertia: Infinity,
             ref: function ref(b) {
-              _this2.body = b;
+              _this3.body = b;
             }
           },
           _react2.default.createElement(_src.Sprite, {
@@ -20213,14 +20266,14 @@ var Character = (0, _mobxReact.observer)(_class = (_temp = _class2 = function (_
         return this.enterBuilding(body);
       }
 
-      if (keys.isDown(keys.LEFT)) {
+      if (keys.isDown(keys.LEFT) || this.state.leftClicked) {
         if (shouldMoveStageLeft) {
           store.setStageX(store.stageX + 5);
         }
 
         this.move(body, -5);
         characterState = 1;
-      } else if (keys.isDown(keys.RIGHT)) {
+      } else if (keys.isDown(keys.RIGHT) || this.state.rightClicked) {
         if (shouldMoveStageRight) {
           store.setStageX(store.stageX - 5);
         }

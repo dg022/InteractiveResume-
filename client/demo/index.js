@@ -1,15 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import Presentation from "./presentation";
 import { AppContainer } from "react-hot-loader";
 import io from "socket.io-client";
 
+//const socket = io("http://localhost:8080/");
 const socket = io("https://game-resume-interactive.herokuapp.com/");
-// const socket = io("http://localhost:8080/");
+// const [leftClicked, setLeftClicked] = useState(false);
+// const [rightClicked, setRightClicked] = useState(false);
 
-socket.on("moveLeft", (id) => {
-  console.log("Holy shit THIS IS HAPPENING, WE TRIED TO MOVE LEFT");
-});
+// socket.on("moveLeft", (id) => {
+//   setLeftClicked(true);
+// });
+
+// socket.on("stopMovingLeft", (id) => {
+//   setLeftClicked(false);
+// });
+
+// socket.on("moveRight", (id) => {
+//   setRightClicked(true);
+// });
+
+// socket.on("stopMovingRight", (id) => {
+//   setRightClicked(false);
+// });
 
 const handleMove = () => {};
 
@@ -33,7 +47,7 @@ window.mobileAndTabletCheck = function () {
 
 ReactDOM.render(
   <AppContainer>
-    <Presentation />
+    <Presentation socket={socket} />
   </AppContainer>,
   document.getElementById("root")
 );
@@ -49,6 +63,7 @@ if (process.env.NODE_ENV !== "production") {
     );
   });
 }
+
 if (window.mobileAndTabletCheck()) {
   console.log("THIS IS TRUE, HERE");
   ReactDOM.render(
@@ -59,10 +74,21 @@ if (window.mobileAndTabletCheck()) {
             console.log("here");
             socket.emit("left", socket.id);
           }}
-          onTouchEnd={() => console.log("you let go of this button")}
+          onTouchEnd={() => {
+            console.log("you let go of this button");
+            socket.emit("stopMovingLeft", socket.id);
+          }}
           class="chevron circle left icon"
         ></i>
-        <i class="chevron circle right icon"></i>
+        <i
+          onTouchStart={() => {
+            socket.emit("right", socket.id);
+          }}
+          onTouchEnd={() => {
+            socket.emit("stopMovingRight", socket.id);
+          }}
+          class="chevron circle right icon"
+        ></i>
       </center>
     </div>,
 
