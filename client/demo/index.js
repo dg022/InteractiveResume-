@@ -65,13 +65,11 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 if (window.mobileAndTabletCheck()) {
-  console.log("THIS IS TRUE, HERE");
   ReactDOM.render(
     <div className="controller">
       <center>
         <i
           onTouchStart={() => {
-            console.log("here");
             socket.emit("left", socket.id);
           }}
           onTouchEnd={() => {

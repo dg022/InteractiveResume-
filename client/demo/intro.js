@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { AudioPlayer } from '../src';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { AudioPlayer } from "../src";
 
 export default class Intro extends Component {
   static propTypes = {
@@ -19,8 +19,8 @@ export default class Intro extends Component {
   }
 
   componentDidMount() {
-    this.startNoise = new AudioPlayer('/assets/start.wav');
-    window.addEventListener('keypress', this.handleKeyPress);
+    this.startNoise = new AudioPlayer("/assets/start.wav");
+    window.addEventListener("keypress", this.handleKeyPress);
     this.animationFrame = requestAnimationFrame(this.startUpdate);
     this.interval = setInterval(() => {
       this.setState({
@@ -30,7 +30,7 @@ export default class Intro extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keypress', this.handleKeyPress);
+    window.removeEventListener("keypress", this.handleKeyPress);
     cancelAnimationFrame(this.animationFrame);
     clearInterval(this.interval);
   }
@@ -38,10 +38,10 @@ export default class Intro extends Component {
   render() {
     return (
       <div>
-        <img className="intro" src="assets/intro.png" />
+        <img className="intro" src="assets/introo.png" />
         <p
           className="start"
-          style={{ display: this.state.blink ? 'block' : 'none' }}
+          style={{ display: this.state.blink ? "block" : "none" }}
         >
           Press Start
         </p>
