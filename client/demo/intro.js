@@ -12,6 +12,7 @@ export default class Intro extends Component {
 
     this.state = {
       blink: false,
+      screenNumber: 0,
     };
 
     this.startUpdate = this.startUpdate.bind(this);
@@ -36,20 +37,41 @@ export default class Intro extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <img className="intro" src="assets/introOo1.png" />
-        <p
-          className="start"
-          style={{ display: this.state.blink ? "block" : "none" }}
-        >
-          Press Start
-        </p>
-        <button type="button" class="nes-btn is-primary">
-          Primary
-        </button>
-      </div>
-    );
+    if (this.state.screenNumber === 0) {
+      return (
+        <div>
+          <img className="intro" src="assets/introOo1.png" />
+          <p
+            className="start"
+            style={{ display: this.state.blink ? "block" : "none" }}
+          >
+            Press Start
+          </p>
+        </div>
+      );
+    }
+
+    if (this.state.screenNumber === 1) {
+      return (
+        <div>
+          <center> Choose Controller Option</center>
+          <div className="centered">
+            {" "}
+            <button type="button" class="nes-btn is-primary">
+              Keyboard
+            </button>
+            |
+            <button type="button" class="nes-btn is-primary">
+              Phone
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    if (this.state.screenNumber === 2) {
+      return <div> </div>;
+    }
   }
 
   startUpdate() {
@@ -58,8 +80,12 @@ export default class Intro extends Component {
 
   handleKeyPress(e) {
     if (e.keyCode === 13) {
-      this.startNoise.play();
-      this.props.onStart();
+      if (this.state.screenNumber === 0) {
+        this.setState({ screenNumber: 1 });
+      } else {
+        this.startNoise.play();
+        this.props.onStart();
+      }
     }
   }
 }
