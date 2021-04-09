@@ -61,7 +61,11 @@ export default class Intro extends Component {
               Keyboard
             </button>
             |
-            <button type="button" class="nes-btn is-primary">
+            <button
+              onClick={() => this.setState({ screenNumber: 2 })}
+              type="button"
+              class="nes-btn is-primary"
+            >
               Phone
             </button>
           </div>
@@ -70,7 +74,13 @@ export default class Intro extends Component {
     }
 
     if (this.state.screenNumber === 2) {
-      return <div> </div>;
+      return (
+        <div>
+          <div class="ui segment">
+            <p>LOOK IM ADDIG CONCTENT WOWOOWOWO</p>
+          </div>
+        </div>
+      );
     }
   }
 
