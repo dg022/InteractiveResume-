@@ -38,13 +38,16 @@ export default class Intro extends Component {
   render() {
     return (
       <div>
-        <img className="intro" src="assets/introo.png" />
+        <img className="intro" src="assets/introOo1.png" />
         <p
           className="start"
           style={{ display: this.state.blink ? "block" : "none" }}
         >
           Press Start
         </p>
+        <button type="button" class="nes-btn is-primary">
+          Primary
+        </button>
       </div>
     );
   }
