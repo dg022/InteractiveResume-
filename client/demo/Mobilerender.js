@@ -6,7 +6,9 @@ export default class Mobilerender extends Component {
     this.keyListener.unsubscribe();
   }
 
-  
+  componentDidMount() {
+    //ToDo, react to server side message that the connection worked
+  }
 
   render() {
     const controller = () => {
@@ -37,11 +39,13 @@ export default class Mobilerender extends Component {
       );
     };
 
-    const submit = ()=>{
-
-        this.props.socket.emit("submitRoomNumber", this.state.textValue)
-
-    }
+    const submit = () => {
+      this.props.socket.emit(
+        "submitRoomNumber",
+        this.state.textValue,
+        sokcet.id
+      );
+    };
 
     if (this.state.notConnected) {
       return (
