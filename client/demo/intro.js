@@ -76,7 +76,7 @@ export default class Intro extends Component {
             <button
               onClick={() => this.setState({ screenNumber: 2 })}
               type="button"
-              class="nes-btn is-primary"
+              className="nes-btn is-primary"
             >
               Phone
             </button>

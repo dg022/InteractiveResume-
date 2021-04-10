@@ -15853,6 +15853,10 @@ var _socket = __webpack_require__(101);
 
 var _socket2 = _interopRequireDefault(_socket);
 
+var _Mobilerender = __webpack_require__(126);
+
+var _Mobilerender2 = _interopRequireDefault(_Mobilerender);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //const socket = io("http://localhost:8080/");
@@ -15906,35 +15910,7 @@ if (false) {
 }
 
 if (window.mobileAndTabletCheck()) {
-  console.log("THIS IS TRUE, HERE");
-  _reactDom2.default.render(_react2.default.createElement(
-    "div",
-    { className: "controller" },
-    _react2.default.createElement(
-      "center",
-      null,
-      _react2.default.createElement("i", {
-        onTouchStart: function onTouchStart() {
-          console.log("here");
-          socket.emit("left", socket.id);
-        },
-        onTouchEnd: function onTouchEnd() {
-          console.log("you let go of this button");
-          socket.emit("stopMovingLeft", socket.id);
-        },
-        "class": "chevron circle left icon"
-      }),
-      _react2.default.createElement("i", {
-        onTouchStart: function onTouchStart() {
-          socket.emit("right", socket.id);
-        },
-        onTouchEnd: function onTouchEnd() {
-          socket.emit("stopMovingRight", socket.id);
-        },
-        "class": "chevron circle right icon"
-      })
-    )
-  ), document.getElementById("root"));
+  _reactDom2.default.render(_react2.default.createElement(_Mobilerender2.default, { socket: socket }), document.getElementById("root"));
 }
 
 /***/ }),
@@ -18438,7 +18414,7 @@ var Presentation = function (_Component) {
   _createClass(Presentation, [{
     key: "render",
     value: function render() {
-      this.gameStates = [_react2.default.createElement(_intro2.default, { onStart: this.handleStart }), _react2.default.createElement(_game2.default, { socket: this.props.socket, onLeave: this.handleLeave }), _react2.default.createElement(_slides2.default, { onDone: this.handleDone, index: this.state.slideIndex })];
+      this.gameStates = [_react2.default.createElement(_intro2.default, { socket: this.props.socket, onStart: this.handleStart }), _react2.default.createElement(_game2.default, { socket: this.props.socket, onLeave: this.handleLeave }), _react2.default.createElement(_slides2.default, { onDone: this.handleDone, index: this.state.slideIndex })];
       return this.gameStates[this.state.gameState];
     }
   }, {
@@ -18513,7 +18489,8 @@ var Intro = (_temp = _class = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Intro.__proto__ || Object.getPrototypeOf(Intro)).call(this, props));
 
     _this.state = {
-      blink: false
+      blink: false,
+      screenNumber: 0
     };
 
     _this.startUpdate = _this.startUpdate.bind(_this);
@@ -18522,54 +18499,121 @@ var Intro = (_temp = _class = function (_Component) {
   }
 
   _createClass(Intro, [{
-    key: 'componentDidMount',
+    key: "componentDidMount",
     value: function componentDidMount() {
       var _this2 = this;
 
-      this.startNoise = new _src.AudioPlayer('/assets/start.wav');
-      window.addEventListener('keypress', this.handleKeyPress);
+      var roomNumber = Math.floor(Math.random() * 100000);
+      this.props.socket.emit("newRoom", roomNumber);
+      this.startNoise = new _src.AudioPlayer("/assets/start.wav");
+      window.addEventListener("keypress", this.handleKeyPress);
       this.animationFrame = requestAnimationFrame(this.startUpdate);
       this.interval = setInterval(function () {
         _this2.setState({
-          blink: !_this2.state.blink
+          blink: !_this2.state.blink,
+          roomNumber: roomNumber
         });
       }, 500);
+
+      this.props.socket.on("connected", function () {
+        _this2.startNoise.play();
+        _this2.props.onStart();
+      });
     }
   }, {
-    key: 'componentWillUnmount',
+    key: "componentWillUnmount",
     value: function componentWillUnmount() {
-      window.removeEventListener('keypress', this.handleKeyPress);
+      window.removeEventListener("keypress", this.handleKeyPress);
       cancelAnimationFrame(this.animationFrame);
       clearInterval(this.interval);
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
-      return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement('img', { className: 'intro', src: 'assets/intro.png' }),
-        _react2.default.createElement(
-          'p',
-          {
-            className: 'start',
-            style: { display: this.state.blink ? 'block' : 'none' }
-          },
-          'Press Start'
-        )
-      );
+      var _this3 = this;
+
+      var setRoomNumber = function setRoomNumber() {
+        var term = Math.floor(Math.random() * 100000);
+      };
+
+      if (this.state.screenNumber === 0) {
+        return _react2.default.createElement(
+          "div",
+          null,
+          _react2.default.createElement("img", { className: "intro", src: "assets/introOo1.png" }),
+          _react2.default.createElement(
+            "p",
+            {
+              className: "start",
+              style: { display: this.state.blink ? "block" : "none" }
+            },
+            "Press Start"
+          )
+        );
+      }
+
+      if (this.state.screenNumber === 1) {
+        return _react2.default.createElement(
+          "div",
+          null,
+          _react2.default.createElement(
+            "center",
+            null,
+            " Choose Controller Option"
+          ),
+          _react2.default.createElement(
+            "div",
+            { className: "centered" },
+            " ",
+            _react2.default.createElement(
+              "button",
+              { type: "button", "class": "nes-btn is-primary" },
+              "Keyboard"
+            ),
+            "|",
+            _react2.default.createElement(
+              "button",
+              {
+                onClick: function onClick() {
+                  return _this3.setState({ screenNumber: 2 });
+                },
+                type: "button",
+                className: "nes-btn is-primary"
+              },
+              "Phone"
+            )
+          )
+        );
+      }
+
+      if (this.state.screenNumber === 2) {
+        return _react2.default.createElement(
+          "div",
+          { className: "centered" },
+          _react2.default.createElement(
+            "p",
+            null,
+            "Room Code: ",
+            this.state.roomNumber
+          )
+        );
+      }
     }
   }, {
-    key: 'startUpdate',
+    key: "startUpdate",
     value: function startUpdate() {
       this.animationFrame = requestAnimationFrame(this.startUpdate);
     }
   }, {
-    key: 'handleKeyPress',
+    key: "handleKeyPress",
     value: function handleKeyPress(e) {
       if (e.keyCode === 13) {
-        this.startNoise.play();
-        this.props.onStart();
+        if (this.state.screenNumber === 0) {
+          this.setState({ screenNumber: 1 });
+        } else {
+          this.startNoise.play();
+          this.props.onStart();
+        }
       }
     }
   }]);
@@ -28678,6 +28722,159 @@ Backoff.prototype.setJitter = function(jitter){
 };
 
 
+
+/***/ }),
+/* 126 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Mobilerender = function (_Component) {
+  _inherits(Mobilerender, _Component);
+
+  _createClass(Mobilerender, [{
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      this.stopMusic();
+      this.keyListener.unsubscribe();
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      //ToDo, react to server side message that the connection worked
+      this.props.socket.on("connected", function (roomNumber) {
+        console.log("THIS SHOULD BE HIT", roomNumber);
+        _this2.setState({ roomNumber: roomNumber }, function () {
+          _this2.setState({ notConnected: false });
+        });
+      });
+
+      this.props.socket.on("failed", function () {
+        _this2.setState({ error: true });
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+
+      var controller = function controller() {
+        return _react2.default.createElement(
+          "div",
+          { className: "controller" },
+          _react2.default.createElement(
+            "center",
+            null,
+            _react2.default.createElement("i", {
+              onTouchStart: function onTouchStart() {
+                _this3.props.socket.emit("left", _this3.props.socket.id, _this3.state.roomNumber);
+              },
+              onTouchEnd: function onTouchEnd() {
+                _this3.props.socket.emit("stopMovingLeft", _this3.props.socket.id, _this3.state.roomNumber);
+              },
+              "class": "chevron circle left icon"
+            }),
+            _react2.default.createElement("i", {
+              onTouchStart: function onTouchStart() {
+                _this3.props.socket.emit("right", _this3.props.socket.id, _this3.state.roomNumber);
+              },
+              onTouchEnd: function onTouchEnd() {
+                _this3.props.socket.emit("stopMovingRight", _this3.props.socket.id, _this3.state.roomNumber);
+              },
+              "class": "chevron circle right icon"
+            })
+          )
+        );
+      };
+
+      var submit = function submit() {
+        _this3.props.socket.emit("submitRoomNumber", _this3.state.textValue, _this3.props.socket.id);
+      };
+
+      if (this.state.notConnected) {
+        return _react2.default.createElement(
+          "div",
+          { className: "centered" },
+          this.state.error && _react2.default.createElement(
+            "p",
+            null,
+            " Wrong Code"
+          ),
+          _react2.default.createElement(
+            "p",
+            null,
+            " Enter Code:"
+          ),
+          _react2.default.createElement("input", {
+            onChange: function onChange(e) {
+              return _this3.setState({ textValue: e.target.value });
+            },
+            value: this.state.textValue,
+            type: "text"
+          }),
+          _react2.default.createElement(
+            "button",
+            {
+              onClick: function onClick() {
+                return submit();
+              },
+              type: "button",
+              "class": "nes-btn is-success"
+            },
+            "Enter!"
+          ),
+          "|",
+          _react2.default.createElement(
+            "button",
+            { type: "button", "class": "nes-btn is-error" },
+            "No thanks"
+          )
+        );
+      }
+      return controller();
+    }
+  }]);
+
+  function Mobilerender(props) {
+    _classCallCheck(this, Mobilerender);
+
+    var _this = _possibleConstructorReturn(this, (Mobilerender.__proto__ || Object.getPrototypeOf(Mobilerender)).call(this, props));
+
+    _this.state = {
+      notConnected: true,
+      textValue: "",
+      roomNumber: "",
+      error: false
+    };
+    return _this;
+  }
+
+  return Mobilerender;
+}(_react.Component);
+
+exports.default = Mobilerender;
 
 /***/ })
 /******/ ]);
