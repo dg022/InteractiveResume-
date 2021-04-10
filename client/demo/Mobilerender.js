@@ -9,6 +9,7 @@ export default class Mobilerender extends Component {
   componentDidMount() {
     //ToDo, react to server side message that the connection worked
     this.props.socket.on("connected", (roomNumber) => {
+      console.log("THIS SHOULD BE HIT");
       this.setState({ roomNumber: roomNumber }, () => {
         this.setState({ notConnected: false });
       });
@@ -28,15 +29,14 @@ export default class Mobilerender extends Component {
               onTouchStart={() => {
                 this.props.socket.emit(
                   "left",
-                  socket.id,
+                  this.props.socket.id,
                   this.state.roomNumber
                 );
               }}
               onTouchEnd={() => {
-                console.log("you let go of this button");
                 this.props.socket.emit(
                   "stopMovingLeft",
-                  socket.id,
+                  this.props.socket.id,
                   this.state.roomNumber
                 );
               }}
@@ -46,14 +46,14 @@ export default class Mobilerender extends Component {
               onTouchStart={() => {
                 this.props.socket.emit(
                   "right",
-                  socket.id,
+                  this.props.socket.id,
                   this.state.roomNumber
                 );
               }}
               onTouchEnd={() => {
                 this.props.socket.emit(
                   "stopMovingRight",
-                  socket.id,
+                  this.props.socket.id,
                   this.state.roomNumber
                 );
               }}
@@ -68,7 +68,7 @@ export default class Mobilerender extends Component {
       this.props.socket.emit(
         "submitRoomNumber",
         this.state.textValue,
-        this.props.sokcet.id
+        this.props.socket.id
       );
     };
 

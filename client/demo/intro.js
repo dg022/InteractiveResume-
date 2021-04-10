@@ -31,6 +31,11 @@ export default class Intro extends Component {
         roomNumber: roomNumber,
       });
     }, 500);
+
+    this.props.socket.on("connected", () => {
+      this.startNoise.play();
+      this.props.onStart();
+    });
   }
 
   componentWillUnmount() {

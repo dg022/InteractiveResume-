@@ -27,6 +27,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", async () => {});
 
   socket.on("left", (socketID, roomNumber) => {
+    console.log(roomNumber);
     socket.to(parseInt(roomNumber)).emit("moveLeft", 1);
   });
 
@@ -42,15 +43,16 @@ io.on("connection", (socket) => {
     socket.to(parseInt(roomNumber)).emit("stopMovingRight", 1);
   });
   socket.on("submitRoomNumber", (roomNumber, socketID) => {
-    if (rooms.has(roomNumber)) {
+    if (roomNumber in rooms) {
       socket.join(parseInt(roomNumber));
+      socket.to(parseInt(roomNumber)).emit("connected");
       io.to(socketID).emit("connected");
     } else {
       io.to(socketID).emit("failed");
     }
   });
 
-  socket.on("newRoom", (socketID, roomNumber) => {
+  socket.on("newRoom", (roomNumber) => {
     rooms[roomNumber] = roomNumber;
     socket.join(roomNumber);
   });
