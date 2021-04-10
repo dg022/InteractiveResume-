@@ -38,6 +38,14 @@ io.on("connection", (socket) => {
     io.emit("moveRight", 1);
   });
 
+  socket.on("submitRoomNumber", (roomNumber, socketID) => {
+    if (rooms.has(roomNumber)) {
+      io.to(socketID).emit("connected");
+    } else {
+      io.to(socketID).emit("failed");
+    }
+  });
+
   socket.on("stopMovingRight", (arg) => {
     io.emit("stopMovingRight", 1);
   });

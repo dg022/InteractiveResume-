@@ -6,6 +6,8 @@ export default class Mobilerender extends Component {
     this.keyListener.unsubscribe();
   }
 
+  
+
   render() {
     const controller = () => {
       return (
@@ -37,7 +39,8 @@ export default class Mobilerender extends Component {
 
     const submit = ()=>{
 
-        
+        this.props.socket.emit("submitRoomNumber", this.state.textValue)
+
     }
 
     if (this.state.notConnected) {
