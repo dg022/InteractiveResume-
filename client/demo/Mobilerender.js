@@ -9,7 +9,6 @@ export default class Mobilerender extends Component {
   componentDidMount() {
     //ToDo, react to server side message that the connection worked
     this.props.socket.on("connected", (roomNumber) => {
-      console.log("THIS SHOULD BE HIT", roomNumber);
       this.setState({ roomNumber: roomNumber }, () => {
         this.setState({ notConnected: false });
       });
@@ -90,7 +89,12 @@ export default class Mobilerender extends Component {
             Enter!
           </button>
           |
-          <button type="button" class="nes-btn is-error">
+          <button
+            onClick={() => parent.open("https://www.georgedavid.me/")}
+            type="button"
+            class="nes-btn is-error"
+          >
+            {" "}
             No thanks
           </button>
         </div>
