@@ -26,32 +26,33 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", async () => {});
 
-  socket.on("left", (arg) => {
-    io.emit("moveLeft", 1);
+  socket.on("left", (socketID, roomNumber) => {
+    socket.to(parseInt(roomNumber)).emit("moveLeft", 1);
   });
 
-  socket.on("stopMovingLeft", (arg) => {
-    io.emit("stopMovingLeft", 1);
+  socket.on("stopMovingLeft", (socketID, roomNumber) => {
+    socket.to(parseInt(roomNumber)).emit("stopMovingLeft", 1);
   });
 
-  socket.on("right", (arg) => {
-    io.emit("moveRight", 1);
+  socket.on("right", (socketID, roomNumber) => {
+    socket.to(parseInt(roomNumber)).emit("moveRight", 1);
   });
 
+  socket.on("stopMovingRight", (socketID, roomNumber) => {
+    socket.to(parseInt(roomNumber)).emit("stopMovingRight", 1);
+  });
   socket.on("submitRoomNumber", (roomNumber, socketID) => {
     if (rooms.has(roomNumber)) {
+      socket.join(parseInt(roomNumber));
       io.to(socketID).emit("connected");
     } else {
       io.to(socketID).emit("failed");
     }
   });
 
-  socket.on("stopMovingRight", (arg) => {
-    io.emit("stopMovingRight", 1);
-  });
-
-  socket.on("newRoom", (roomNumber) => {
+  socket.on("newRoom", (socketID, roomNumber) => {
     rooms[roomNumber] = roomNumber;
+    socket.join(roomNumber);
   });
 });
 
