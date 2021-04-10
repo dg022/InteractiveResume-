@@ -9,7 +9,7 @@ export default class Mobilerender extends Component {
   componentDidMount() {
     //ToDo, react to server side message that the connection worked
     this.props.socket.on("connected", (roomNumber) => {
-      console.log("THIS SHOULD BE HIT");
+      console.log("THIS SHOULD BE HIT", roomNumber);
       this.setState({ roomNumber: roomNumber }, () => {
         this.setState({ notConnected: false });
       });

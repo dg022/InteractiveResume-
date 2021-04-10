@@ -9,13 +9,13 @@ const io = require("socket.io")(server, {
   },
 });
 
-// var public = path.join(__dirname, "client/demo");
+var public = path.join(__dirname, "client/demo");
 
-// app.get("/", function (req, res) {
-//   res.sendFile(path.join(public, "index.html"));
-// });
+app.get("/", function (req, res) {
+  res.sendFile(path.join(public, "index.html"));
+});
 
-// app.use("/", express.static(public));
+app.use("/", express.static(public));
 
 const PORT = process.env.PORT || 8080;
 
@@ -46,7 +46,7 @@ io.on("connection", (socket) => {
     if (roomNumber in rooms) {
       socket.join(parseInt(roomNumber));
       socket.to(parseInt(roomNumber)).emit("connected");
-      io.to(socketID).emit("connected");
+      io.to(socketID).emit("connected", roomNumber);
     } else {
       io.to(socketID).emit("failed");
     }
