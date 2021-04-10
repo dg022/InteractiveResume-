@@ -20,7 +20,7 @@ export default class Presentation extends Component {
 
   render() {
     this.gameStates = [
-      <Intro onStart={this.handleStart} />,
+      <Intro socket={this.props.socket} onStart={this.handleStart} />,
       <Game socket={this.props.socket} onLeave={this.handleLeave} />,
       <Slides onDone={this.handleDone} index={this.state.slideIndex} />,
     ];

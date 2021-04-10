@@ -19,6 +19,8 @@ const io = require("socket.io")(server, {
 
 const PORT = process.env.PORT || 8080;
 
+let rooms = new Map();
+
 io.on("connection", (socket) => {
   console.log("New client connected");
 
@@ -38,6 +40,10 @@ io.on("connection", (socket) => {
 
   socket.on("stopMovingRight", (arg) => {
     io.emit("stopMovingRight", 1);
+  });
+
+  socket.on("newRoom", (roomNumber) => {
+    rooms[roomNumber] = roomNumber;
   });
 });
 

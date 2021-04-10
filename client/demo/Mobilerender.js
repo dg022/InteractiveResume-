@@ -35,12 +35,25 @@ export default class Mobilerender extends Component {
       );
     };
 
+    const submit = ()=>{
+
+        
+    }
+
     if (this.state.notConnected) {
       return (
         <div className="centered">
           <p> Enter Code:</p>
-          <input type="text"></input>
-          <button type="button" class="nes-btn is-success">
+          <input
+            onChange={(e) => this.setState({ textValue: e.target.value })}
+            value={this.state.textValue}
+            type="text"
+          ></input>
+          <button
+            onClick={() => console.log(this.state.textValue)}
+            type="button"
+            class="nes-btn is-success"
+          >
             Enter!
           </button>
           |
@@ -58,6 +71,7 @@ export default class Mobilerender extends Component {
 
     this.state = {
       notConnected: true,
+      textValue: "",
     };
   }
 }

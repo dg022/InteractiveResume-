@@ -20,12 +20,15 @@ export default class Intro extends Component {
   }
 
   componentDidMount() {
+    const roomNumber = Math.floor(Math.random() * 100000);
+    this.props.socket.emit("newRoom", roomNumber);
     this.startNoise = new AudioPlayer("/assets/start.wav");
     window.addEventListener("keypress", this.handleKeyPress);
     this.animationFrame = requestAnimationFrame(this.startUpdate);
     this.interval = setInterval(() => {
       this.setState({
         blink: !this.state.blink,
+        roomNumber: roomNumber,
       });
     }, 500);
   }
@@ -37,6 +40,10 @@ export default class Intro extends Component {
   }
 
   render() {
+    const setRoomNumber = () => {
+      const term = Math.floor(Math.random() * 100000);
+    };
+
     if (this.state.screenNumber === 0) {
       return (
         <div>
