@@ -75,10 +75,8 @@ export default class Intro extends Component {
 
     if (this.state.screenNumber === 2) {
       return (
-        <div>
-          <div class="ui segment">
-            <p>LOOK IM ADDIG CONCTENT WOWOOWOWO</p>
-          </div>
+        <div className="centered">
+          <p>Room Code: {this.state.screenNumber}</p>
         </div>
       );
     }

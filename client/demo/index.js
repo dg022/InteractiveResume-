@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import Presentation from "./presentation";
 import { AppContainer } from "react-hot-loader";
 import io from "socket.io-client";
+import Mobilerender from "./Mobilerender";
 
 const socket = io("http://localhost:8080/");
 //const socket = io("https://game-resume-interactive.herokuapp.com/");
@@ -66,29 +67,7 @@ if (process.env.NODE_ENV !== "production") {
 
 if (window.mobileAndTabletCheck()) {
   ReactDOM.render(
-    <div className="controller">
-      <center>
-        <i
-          onTouchStart={() => {
-            socket.emit("left", socket.id);
-          }}
-          onTouchEnd={() => {
-            console.log("you let go of this button");
-            socket.emit("stopMovingLeft", socket.id);
-          }}
-          class="chevron circle left icon"
-        ></i>
-        <i
-          onTouchStart={() => {
-            socket.emit("right", socket.id);
-          }}
-          onTouchEnd={() => {
-            socket.emit("stopMovingRight", socket.id);
-          }}
-          class="chevron circle right icon"
-        ></i>
-      </center>
-    </div>,
+    <Mobilerender socket={socket} />,
 
     document.getElementById("root")
   );
